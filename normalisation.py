@@ -1,5 +1,5 @@
 import math
-import numpy as np
+import numpy as np 
 
 layer_outputs = [4.8, 1.21, 2.385]
 
