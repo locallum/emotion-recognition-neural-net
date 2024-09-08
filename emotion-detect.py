@@ -77,9 +77,9 @@ model = Model(inputs=mobilenetV2_model.input, outputs=prediction)
 # Define the learning rate scheduler function
 def lr_scheduler(epoch, lr):
     if epoch < 5:
-        return lr
+        return round(lr, 4)  # Rounding the learning rate for display
     else:
-        return lr * tf.math.exp(-0.1)
+        return round(lr - 0.0015*(epoch-4), 4)
 
 
 # Compile the model
