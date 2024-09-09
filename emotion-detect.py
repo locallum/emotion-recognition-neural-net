@@ -68,7 +68,7 @@ x = GlobalAveragePooling2D()(x)
 x = Dense(512, activation='relu')(x)
 x = Dense(256, activation='relu')(x)
 x = BatchNormalization()(x)
-x = Dropout(0.4)(x)
+x = Dropout(0.2)(x)
 prediction = Dense(len(class_names), activation='softmax')(x)
 
 # Create the final model
