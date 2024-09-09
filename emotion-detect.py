@@ -38,7 +38,7 @@ validdata_generator = ImageDataGenerator(rescale=1./255)
 train_generator = traindata_generator.flow_from_directory(
     train_path,
     target_size=(224, 224),
-    batch_size=32,
+    batch_size=64,
     class_mode='categorical',
     classes=class_names
 )
@@ -47,7 +47,7 @@ train_generator = traindata_generator.flow_from_directory(
 validation_generator = validdata_generator.flow_from_directory(
     valid_path,
     target_size=(224, 224),
-    batch_size=32,
+    batch_size=64,
     class_mode='categorical',
     classes=class_names
 )
@@ -59,7 +59,7 @@ mobilenetV2_model = MobileNetV2(weights='imagenet', include_top=False, input_sha
 for layer in mobilenetV2_model.layers:
     layer.trainable = False
 
-for layer in mobilenetV2_model.layers[-20:]:
+for layer in mobilenetV2_model.layers[-40:]:
     layer.trainable = True
 
 # Adding custom layers on top of the base model
@@ -68,7 +68,7 @@ x = GlobalAveragePooling2D()(x)
 x = Dense(512, activation='relu')(x)
 x = Dense(256, activation='relu')(x)
 x = BatchNormalization()(x)
-x = Dropout(0.4)(x)
+x = Dropout(0.5)(x)
 prediction = Dense(len(class_names), activation='softmax')(x)
 
 # Create the final model
@@ -76,10 +76,10 @@ model = Model(inputs=mobilenetV2_model.input, outputs=prediction)
 
 # Define the learning rate scheduler function
 def lr_scheduler(epoch, lr):
-    if epoch < 5:
-        return round(lr, 4)  # Rounding the learning rate for display
+    if epoch <= 1:
+        return 0.01  # Rounding the learning rate for display
     else:
-        return round(lr - 0.0015*(epoch-4), 4)
+        return 0.001
 
 
 # Compile the model
@@ -96,7 +96,7 @@ callbacks = [
 # Train the model
 history = model.fit(
     train_generator,
-    epochs=10,
+    epochs=20,
     validation_data=validation_generator,
     callbacks=callbacks
 )
