@@ -59,7 +59,7 @@ mobilenetV2_model = MobileNetV2(weights='imagenet', include_top=False, input_sha
 for layer in mobilenetV2_model.layers:
     layer.trainable = False
 
-for layer in mobilenetV2_model.layers[-40:]:
+for layer in mobilenetV2_model.layers[-20:]:
     layer.trainable = True
 
 # Adding custom layers on top of the base model
@@ -68,7 +68,7 @@ x = GlobalAveragePooling2D()(x)
 x = Dense(512, activation='relu')(x)
 x = Dense(256, activation='relu')(x)
 x = BatchNormalization()(x)
-x = Dropout(0.5)(x)
+x = Dropout(0.4)(x)
 prediction = Dense(len(class_names), activation='softmax')(x)
 
 # Create the final model
@@ -102,7 +102,7 @@ history = model.fit(
 )
 
 # Save the trained model
-model.save('emotion_detection_model.h5')
+model.save('emotion_detection_model.keras')
 
 # Evaluate the model
 test_loss, test_acc = model.evaluate(validation_generator)
