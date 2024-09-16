@@ -68,11 +68,11 @@ x = Conv2D(32, (3, 3), activation='relu', padding='same')(x)
 x = MaxPooling2D((2, 2))(x)
 x = Conv2D(64, (3, 3), activation='relu', padding='same')(x)
 x = MaxPooling2D((2, 2))(x)
-x = Conv2D(128, (3, 3), activation='relu', padding='same')(x)
-x = MaxPooling2D((2, 2))(x)
+# x = Conv2D(128, (3, 3), activation='relu', padding='same')(x)
+# x = MaxPooling2D((2, 2), padding='same')(x)
 x = GlobalAveragePooling2D()(x)
 x = BatchNormalization()(x)
-x = Dropout(0.3)(x)
+x = Dropout(0.2)(x)
 prediction = Dense(len(class_names), activation='softmax')(x)
 
 # Create the final model
@@ -91,7 +91,7 @@ model.compile(optimizer=Adam(learning_rate=initial_lr), loss='categorical_crosse
 
 # Callbacks
 callbacks = [
-    EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True),
+    EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True),
     ReduceLROnPlateau(monitor='val_loss', patience=2, factor=0.5, min_lr=1e-6),
     LearningRateScheduler(lr_scheduler, verbose=1)
 ]
